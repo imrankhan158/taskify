@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+  taskify-client:
+    container_name: taskify-client
+    build:
+      dockerfile: Dockerfile
+      context: ./taskify-client
+    volumes:
+      - ./client:/app:ro
+      - /app/node_modules/
+    ports:
+      - 127.0.0.1:3000:3000
+    restart: always
+    networks:
+      - taskify-network
+  taskify-server:
+    container_name: taskify-server
+    build:
+      dockerfile: Dockerfile
+      context: ./taskify-server
+    volumes:
+      - ./server:/app:ro
+      - /app/node_modules/
+    restart: always
+    ports:
+      - 127.0.0.1:5000:5000
+    env_file:
+      - ./server/.env
+    networks:
+      - taskify-network
+    depends_on:
+      - mongodb
+      - mailhog
+  taskify-mongodb:
+    container_name: taskify-mongodb
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata6:/data/db
+    networks:
+      - taskify-network
+  taskify-mailhog:
+    container_name: taskify-mailhog
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - taskify-network
+volumes:
+  dbdata6:
+
+networks:
+  taskify-network:
+    driver: bridge
