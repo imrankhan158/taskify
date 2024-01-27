@@ -1,5 +1,5 @@
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../../components/landing/Header";
+import Footer from "../../components/landing/Footer";
 import Main from "./Main";
 
 const Landing = () => {

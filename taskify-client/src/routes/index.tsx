@@ -1,6 +1,6 @@
 import AuthLayout from "@/layouts/auth";
 import MainLayout from "@/layouts/main";
-import LoadingScreen from "@/pages/utils/LoadingScreen";
+import LoadingScreen from "@/components/LoadingScreen";
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 
