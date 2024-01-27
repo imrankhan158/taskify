@@ -28,7 +28,7 @@ export default function Router() {
       path: "/",
       element: <MainLayout />,
       children: [
-        { path: "", element: <MarketingPage /> },
+        { path: "", element: <LandingPage /> },
         { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
@@ -41,4 +41,4 @@ const RegisterPage = Loadable(lazy(() => import("@/pages/auth/Register")));
 const LoginPage = Loadable(lazy(() => import("@/pages/auth/Login")));
 
 // Marketing
-const MarketingPage = Loadable(lazy(() => import("@/pages/marketing")));
+const LandingPage = Loadable(lazy(() => import("@/pages/landing")));
