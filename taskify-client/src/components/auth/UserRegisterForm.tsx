@@ -4,6 +4,11 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { RegiterUser } from "@/redux/slices/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -11,20 +16,39 @@ export function UserRegisterForm({
   className,
   ...props
 }: UserRegisterFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
+  const RegisterSchema = yup.object().shape({
+    firstName: yup.string().required("First Name is required"),
+    lastName: yup.string().required("Last Name is required"),
+    email: yup
+      .string()
+      .required("Email is required")
+      .email("Email must be a valid email address"),
+    password: yup.string().min(8).required("Password is required"),
+  });
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+  const methods = useForm({
+    resolver: yupResolver(RegisterSchema),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = methods;
+
+  const onSubmit = async (data: unknown) => {
+    console.log(data);
+    dispatch(RegiterUser(data));
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-2">
             <div className="grid grid-flow-col gap-2">
@@ -32,26 +56,32 @@ export function UserRegisterForm({
                 First Name
               </Label>
               <Input
-                id="email"
+                id="firstName"
                 placeholder="First Name"
-                type="name"
+                type="text"
                 autoCapitalize="none"
                 autoComplete="text"
                 autoCorrect="off"
                 disabled={isLoading}
+                {...register("firstName", {
+                  required: "First Name is required",
+                })}
               />
 
               <Label className="sr-only" htmlFor="email">
                 Last Name
               </Label>
               <Input
-                id="email"
+                id="lastName"
                 placeholder="Last Name"
-                type="name"
+                type="text"
                 autoCapitalize="none"
                 autoComplete="text"
                 autoCorrect="off"
                 disabled={isLoading}
+                {...register("lastName", {
+                  required: "Last Name is required",
+                })}
               />
             </div>
 
@@ -66,6 +96,13 @@ export function UserRegisterForm({
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email format",
+                },
+              })}
             />
 
             <Label className="sr-only" htmlFor="email">
@@ -79,11 +116,14 @@ export function UserRegisterForm({
               autoComplete="text"
               autoCorrect="off"
               disabled={isLoading}
+              {...register("password", {
+                required: "Password is required",
+              })}
             />
           </div>
           <Button disabled={isLoading}>
             {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In with Email
+            Register
           </Button>
         </div>
       </form>

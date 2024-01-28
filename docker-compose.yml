@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
       context: ./taskify-client
     volumes:
-      - ./client:/app:ro
+      - ./taskify-client:/app:ro
       - /app/node_modules/
     ports:
       - 127.0.0.1:3000:3000
@@ -19,18 +19,18 @@ services:
       dockerfile: Dockerfile
       context: ./taskify-server
     volumes:
-      - ./server:/app:ro
+      - ./taskify-server:/app:ro
       - /app/node_modules/
     restart: always
     ports:
       - 127.0.0.1:5000:5000
     env_file:
-      - ./server/.env
+      - ./taskify-server/.env
     networks:
       - taskify-network
     depends_on:
-      - mongodb
-      - mailhog
+      - taskify-mongodb
+      - taskify-mailhog
   taskify-mongodb:
     container_name: taskify-mongodb
     image: mongo:6-jammy

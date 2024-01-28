@@ -7,6 +7,8 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import mongosanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
+import authRoutes from "./routes/auth.js";
+import { errorHandler } from "./middlewares/error.js";
 dotenv.config();
 
 const app = express();
@@ -32,11 +34,10 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.use(mongosanitize());
 app.use(xss());
+
+app.use("/auth", authRoutes);
+app.use(errorHandler);
 
 export default app;

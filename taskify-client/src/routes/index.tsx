@@ -3,6 +3,7 @@ import MainLayout from "@/layouts/main";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
+import Organization from "@/pages/dashboard/Organization";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Loadable = (Component: any) => (props: any) => {
@@ -29,6 +30,7 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: "", element: <LandingPage /> },
+        { path: "organization/:orgId", element: <OrganizationPage /> },
         { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
@@ -42,3 +44,6 @@ const LoginPage = Loadable(lazy(() => import("@/pages/auth/Login")));
 
 // Marketing
 const LandingPage = Loadable(lazy(() => import("@/pages/landing")));
+const OrganizationPage = Loadable(
+  lazy(() => import("@/pages/dashboard/Organization"))
+);
