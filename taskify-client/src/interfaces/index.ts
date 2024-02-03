@@ -5,4 +5,19 @@ interface UserModel {
   password: string;
 }
 
-export type { UserModel }
+interface Organization {
+  id: string;
+  slug: string;
+  imageUrl: string;
+  name: string;
+}
+
+interface NavItemProps {
+  isExpanded: boolean;
+  isActive: boolean;
+  organization: Organization;
+  onExpand: (id: string) => void;
+}
+
+
+export type { UserModel, Organization, NavItemProps }

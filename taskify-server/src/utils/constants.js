@@ -12,3 +12,11 @@ export const UserLoginType = {
 };
 
 export const AvailableSocialLogins = Object.values(UserLoginType);
+
+/**
+ * @type {{ ADMIN: "ADMIN"; INDIVIDUAL: "INDIVIDUAL"} as const}
+ */
+export const UserRole = {
+  ADMIN: "ADMIN",
+  INDIVIDUAL: "INDIVIDUAL",
+};

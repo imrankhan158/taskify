@@ -9,6 +9,7 @@ import mongosanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import authRoutes from "./routes/auth.js";
 import { errorHandler } from "./middlewares/error.js";
+import appRoutes from "./routes/app.js";
 dotenv.config();
 
 const app = express();
@@ -38,6 +39,7 @@ app.use(mongosanitize());
 app.use(xss());
 
 app.use("/auth", authRoutes);
+app.use("/organization", appRoutes);
 app.use(errorHandler);
 
 export default app;

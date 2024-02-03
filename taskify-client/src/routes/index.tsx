@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/main";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
-import Organization from "@/pages/dashboard/Organization";
+import OrganizationLayout from "@/pages/dashboard/OrganizationLayout";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Loadable = (Component: any) => (props: any) => {
@@ -45,5 +45,5 @@ const LoginPage = Loadable(lazy(() => import("@/pages/auth/Login")));
 // Marketing
 const LandingPage = Loadable(lazy(() => import("@/pages/landing")));
 const OrganizationPage = Loadable(
-  lazy(() => import("@/pages/dashboard/Organization"))
+  lazy(() => import("@/pages/dashboard/OrganizationLayout"))
 );
