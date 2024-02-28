@@ -9,9 +9,9 @@ import { store } from "./redux/store.ts";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <ReduxProvider store={store}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      {/* <React.StrictMode> */}
+      <App />
+      {/* </React.StrictMode> */}
     </ReduxProvider>
   </BrowserRouter>
 );

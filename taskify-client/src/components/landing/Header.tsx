@@ -6,7 +6,7 @@ import WorkspaceSwitcher from "./WorkspaceSwitcher";
 
 const Header = ({ isUserLoggedIn = false }) => {
   return (
-    <header className="fixed top-0 w-full h-14 px-4 border-b shadow-sm bg-white flex items-center">
+    <header className="fixed top-0 w-full h-14 px-4 border-b shadow-sm bg-white flex items-center z-50">
       <div className="mx-auto flex items-center w-full justify-between">
         <div className="flex gap-4 items-end">
           <Logo />

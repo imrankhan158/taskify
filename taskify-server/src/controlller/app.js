@@ -35,7 +35,19 @@ export const getOrganization = asyncHandler(async (req, res) => {
   }).select("_id name createdAt");
   const workspaces = await Workspace.find({
     organization: organization._id,
-  }).select("-users");
+  }).select("_id avatar name slug organization");
+  const boardList = await Board.find({
+    workspace: { $in: workspaces.map((workspace) => workspace._id) },
+  }).select("_id name workspace imageUrl");
+
+  const updatedWorkspaces = workspaces.map((workspace) => {
+    const workspaceBoards = boardList.filter(
+      (board) => board.workspace.toString() === workspace._id.toString()
+    );
+    const ws = workspace._doc;
+    return { ...ws, boards: workspaceBoards };
+  });
+
   return res.status(200).json(
     new ApiResponse(
       200,
@@ -44,7 +56,7 @@ export const getOrganization = asyncHandler(async (req, res) => {
           _id: organization._id,
           name: organization.name,
           createdAt: organization.createdAt,
-          workspaces: { ...workspaces },
+          workspaces: updatedWorkspaces,
         },
       },
       "Fetch Organization successfully"
@@ -145,7 +157,22 @@ export const createTodoList = asyncHandler(async (req, res) => {
     )
   );
 });
-export const getTodoList = asyncHandler(async (req, res) => {});
+export const getTodoLists = asyncHandler(async (req, res) => {
+  const { boardId } = req.query;
+  const todoLists = await TodoList.find({ board: boardId }).populate(
+    "cards",
+    "name description sequence _id"
+  );
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        todoLists,
+      },
+      "Fetch Todo Lists successfully"
+    )
+  );
+});
 
 export const createCard = asyncHandler(async (req, res) => {
   const { todoListId, name, description, sequence } = req.body;

@@ -1,10 +1,11 @@
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
+import Main from "@/pages/landing/Main";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
-const AuthLayout = () => {
+const LandingLayout = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   useEffect(() => {
@@ -16,10 +17,10 @@ const AuthLayout = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <Main />
       <Footer />
     </>
   );
 };
 
-export default AuthLayout;
+export default LandingLayout;

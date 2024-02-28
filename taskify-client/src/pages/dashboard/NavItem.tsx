@@ -6,46 +6,51 @@ import {
 import { Button } from "@/components/ui/button";
 import { NavItemProps } from "@/interfaces";
 import { cn } from "@/lib/utils";
+import { UpdateActiveWorkspace } from "@/redux/slices/organization";
 import { Activity, CreditCard, Layout, Settings } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 const NavItem = ({
   isExpanded,
   isActive,
-  organization,
+  workspace,
   onExpand,
 }: NavItemProps) => {
-  const { orgId } = useParams();
+  const { workspaceId } = workspace;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const routes = [
     {
       label: "Boards",
       icon: <Layout className="h-4 w-4 mr-2" />,
-      href: `/organization/${orgId}`,
+      href: `/organization?workspaceId=${workspaceId}`,
     },
     {
       label: "Activity",
       icon: <Activity className="h-4 w-4 mr-2" />,
-      href: `/organization/${orgId}/activity`,
+      href: `/organization/activity?workspaceId=${workspaceId}`,
     },
     {
       label: "Settings",
       icon: <Settings className="h-4 w-4 mr-2" />,
-      href: `/organization/${orgId}/settings`,
+      href: `/organization/settings?workspaceId=${workspaceId}`,
     },
     {
       label: "Billing",
       icon: <CreditCard className="h-4 w-4 mr-2" />,
-      href: `/organization/${orgId}/billing`,
+      href: `/organization/billing?workspaceId=${workspaceId}`,
     },
   ];
 
   const onClick = (href: string) => {
-    console.log(href);
+    dispatch(UpdateActiveWorkspace(workspace));
+    navigate(href);
   };
   return (
-    <AccordionItem value={organization.id} className="border-none">
+    <AccordionItem value={workspace.workspaceId} className="border-none">
       <AccordionTrigger
-        onClick={() => onExpand(organization.id)}
+        onClick={() => onExpand(workspace.workspaceId)}
         className={cn(
           "flex items-center gap-x-2 p-1.5 text-neutral-700 rounded-md hover:bg-neutral-500/10 transition text-start no-underline hover:no-underline",
           isActive && !isExpanded && "bg-sky-500/10 text-sky-700"
@@ -54,12 +59,12 @@ const NavItem = ({
         <div className="flex items-center gap-x-2">
           <div className="w-7 h-7 relative">
             <img
-              src={organization.imageUrl}
+              src={workspace.imageUrl}
               alt="Organization"
               className="rounded-sm object-cover"
             />
           </div>
-          <span className="font-medium text-sm">{organization.name}</span>
+          <span className="font-medium text-sm">{workspace.name}</span>
         </div>
       </AccordionTrigger>
       <AccordionContent className="pt-1 text-neutral-700">

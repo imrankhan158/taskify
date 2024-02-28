@@ -1,9 +1,6 @@
 import * as React from "react";
 import { CheckIcon, ChevronsUpDown, PlusCircleIcon } from "lucide-react";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -16,84 +13,43 @@ import {
   CommandList,
   CommandSeparator,
 } from "../ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "../ui/select";
-import { useForm } from "react-hook-form";
-
-const groups = [
-  {
-    label: "Active Workspaces",
-    workspaces: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
-    label: "Manage Workspaces",
-    workspaces: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-];
-
-type Workspace = (typeof groups)[number]["workspaces"][number];
+import { useDispatch, useSelector } from "react-redux";
+import CreateWorkspace from "./CreateWorkspace";
+import { UpdateActiveWorkspace } from "@/redux/slices/organization";
+import { Workspace } from "@/interfaces";
 
 export default function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false);
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState<Workspace>(
-    groups[0].workspaces[0]
-  );
-
-  const WorkSpaceSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    slug: yup.string().required("Slug is required"),
-    plan: yup.string(),
-    imageUrl: yup.string(),
-  });
-
-  const methods = useForm({
-    resolver: yupResolver(WorkSpaceSchema),
-    defaultValues: {
-      name: "",
-      slug: "",
-      plan: "Freemium",
-      imageUrl: "https://github.com/shadcn.png",
-    },
-  });
-
-  const onSubmit = async (data: unknown) => {
-    console.log(data);
+  const [showCreateWDialog, setShowCreateWDialog] = React.useState(false);
+  const { org } = useSelector((state) => state.org);
+  const group = {
+    name: "Manage Workspaces",
+    workspaces: [{}] as Workspace[],
   };
+  if (org?.workspaces) {
+    group.workspaces = org?.workspaces.map((workspace: any) => {
+      return {
+        name: workspace.name,
+        imageUrl: workspace.avatar.url,
+        workspaceId: workspace._id,
+        boards: workspace.boards,
+        isPro: false,
+      };
+    });
+  }
+  const [selectedTeam, setSelectedTeam] = React.useState<Workspace>(
+    group.workspaces[0]
+  );
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(UpdateActiveWorkspace(selectedTeam));
+  }, [selectedTeam]);
 
   return (
-    <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
+    <Dialog open={showCreateWDialog} onOpenChange={setShowCreateWDialog}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -105,13 +61,12 @@ export default function WorkspaceSwitcher() {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
-                className="grayscale"
+                src={selectedTeam?.imageUrl}
+                alt={selectedTeam?.name}
               />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
+            {selectedTeam?.name}
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -120,38 +75,35 @@ export default function WorkspaceSwitcher() {
             <CommandList>
               <CommandInput placeholder="Search workspace..." />
               <CommandEmpty>No workspace found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.workspaces.map((workspace) => (
-                    <CommandItem
-                      key={workspace.value}
-                      onSelect={() => {
-                        setSelectedTeam(workspace);
-                        setOpen(false);
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${workspace.value}.png`}
-                          alt={workspace.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {workspace.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedTeam.value === workspace.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
+              <CommandGroup key={group.name} heading={group.name}>
+                {group.workspaces.map((workspace: Workspace) => (
+                  <CommandItem
+                    key={workspace.workspaceId}
+                    onSelect={() => {
+                      setSelectedTeam(workspace);
+                      setOpen(false);
+                    }}
+                    className="text-sm"
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage
+                        src={workspace.imageUrl}
+                        alt={workspace.name}
                       />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
+                      <AvatarFallback>SC</AvatarFallback>
+                    </Avatar>
+                    {workspace.name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        selectedTeam?.workspaceId === workspace.workspaceId
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
             </CommandList>
             <CommandSeparator />
             <CommandList>
@@ -160,7 +112,7 @@ export default function WorkspaceSwitcher() {
                   <CommandItem
                     onSelect={() => {
                       setOpen(false);
-                      setShowNewTeamDialog(true);
+                      setShowCreateWDialog(true);
                     }}
                   >
                     <PlusCircleIcon className="mr-2 h-5 w-5" />
@@ -172,71 +124,7 @@ export default function WorkspaceSwitcher() {
           </Command>
         </PopoverContent>
       </Popover>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create workspace</DialogTitle>
-          <DialogDescription>
-            Add a new workspace to manage boards and team.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="flex flex-col md:items-center gap-4 sm:gap-6 justify-between sm:flex-row">
-              <div className="flex flex-col gap-2 w-full">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Acme Inc."
-                  {...methods.register("name", {
-                    required: "Name is required",
-                  })}
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-full">
-                <Label htmlFor="slug">Slug</Label>
-                <Input
-                  id="slug"
-                  type="text"
-                  placeholder="acme-inc"
-                  {...methods.register("slug", {
-                    required: "Slug is required",
-                  })}
-                />
-              </div>
-            </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free" defaultChecked>
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">Freemium</span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div> */}
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowNewTeamDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Create</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
+      <CreateWorkspace setShowCreateWDialog={setShowCreateWDialog} />
     </Dialog>
   );
 }
