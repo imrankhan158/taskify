@@ -35,4 +35,11 @@ interface NavItemProps {
 }
 
 
-export type { UserModel, Organization, NavItemProps, Workspace, Board }
+interface CreateWorkspaceModel {
+  name: string;
+  plan: string;
+  imageUrl: string;
+  orgId: string;
+}
+
+export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel }

@@ -14,29 +14,31 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";
 import { CreateNewWorkspace } from "@/redux/slices/organization";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { CreateWorkspaceModel } from "@/interfaces";
 
 const CreateWorkspace = ({ setShowCreateWDialog }) => {
   const dispatch = useDispatch();
+  const organization = useSelector((state) => state.org.org);
   const WorkSpaceSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
-    slug: yup.string().required("Slug is required"),
     plan: yup.string(),
     imageUrl: yup.string(),
+    orgId: yup.string(),
   });
 
   const methods = useForm({
     resolver: yupResolver(WorkSpaceSchema),
     defaultValues: {
       name: "",
-      slug: "",
-      plan: "Freemium",
+      plan: "Free",
       imageUrl: "https://github.com/shadcn.png",
+      orgId: organization?._id,
     },
   });
 
-  const onSubmit = async (data: unknown) => {
-    console.log(data);
+  const onSubmit = async (data: CreateWorkspaceModel) => {
+    data.orgId = organization?._id;
     dispatch(CreateNewWorkspace(data));
   };
   return (
@@ -58,17 +60,6 @@ const CreateWorkspace = ({ setShowCreateWDialog }) => {
                 placeholder="Acme Inc."
                 {...methods.register("name", {
                   required: "Name is required",
-                })}
-              />
-            </div>
-            <div className="flex flex-col gap-2 w-full">
-              <Label htmlFor="slug">Slug</Label>
-              <Input
-                id="slug"
-                type="text"
-                placeholder="acme-inc"
-                {...methods.register("slug", {
-                  required: "Slug is required",
                 })}
               />
             </div>

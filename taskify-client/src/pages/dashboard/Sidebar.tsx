@@ -1,7 +1,13 @@
 import React from "react";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronsUpDown,
+  Command,
+  Plus,
+  PlusCircleIcon,
+} from "lucide-react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,11 +15,14 @@ import NavItem from "./NavItem";
 import { Organization, Workspace } from "@/interfaces";
 import { useEffect, useState } from "react";
 import { FetchOrganization } from "@/redux/slices/organization";
+import CreateWorkspace from "@/components/dashboard/CreateWorkspace";
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState<Map<string, boolean>>(new Map());
   const dispatch = useDispatch();
   const { org } = useSelector((state) => state.org);
+  const [showCreateWDialog, setShowCreateWDialog] = React.useState(false);
   useEffect(() => {
     dispatch(FetchOrganization());
   }, []);
@@ -44,19 +53,22 @@ const Sidebar = () => {
   };
   return (
     <div className="font-medium text-xs flex-[25%] justify-between items-center mb-1">
-      <div className="flex justify-between items-center">
-        <span className="pl-4">Workspaces</span>
-        <Button
-          asChild
-          type="button"
-          size="icon"
-          variant="ghost"
-          className="ml-auto"
-        >
-          <Link to="/select-org">
-            <Plus className="h-4 w-4" />
-          </Link>
-        </Button>
+      <div>
+        <Dialog open={showCreateWDialog} onOpenChange={setShowCreateWDialog}>
+          <DialogTrigger className="flex justify-between items-center w-full px-4">
+            <span className="pl-4">Workspaces</span>
+            <Button
+              asChild
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="ml-auto"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </DialogTrigger>
+          <CreateWorkspace setShowCreateWDialog={setShowCreateWDialog} />
+        </Dialog>
       </div>
       <Accordion type="multiple" className="space-y-2 mt-4">
         {userMemberships.map((workspace: Workspace) => (

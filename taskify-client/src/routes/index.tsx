@@ -1,10 +1,10 @@
 import AuthLayout from "@/layouts/auth";
 import MainLayout from "@/layouts/main";
 import BoardLayout from "@/layouts/board";
+import LandingLayout from "@/layouts/landing";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
-import LandingLayout from "@/layouts/landing";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Loadable = (Component: any) => (props: any) => {
@@ -36,9 +36,9 @@ export default function Router() {
       element: <MainLayout />,
       children: [
         { path: "organization", element: <BoardListPage /> },
-        { path: "organization/activity", element: <BoardListPage /> },
-        { path: "organization/settings", element: <BoardListPage /> },
-        { path: "organization/billing", element: <BoardListPage /> },
+        { path: "organization/activity", element: <ActivityPage /> },
+        { path: "organization/settings", element: <SettingsPage /> },
+        { path: "organization/billing", element: <BillingPage /> },
         { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
@@ -65,6 +65,9 @@ const LandingPage = Loadable(lazy(() => import("@/pages/landing")));
 const BoardListPage = Loadable(
   lazy(() => import("@/pages/dashboard/BoardList"))
 );
+const ActivityPage = Loadable(lazy(() => import("@/pages/dashboard/activity")));
+const BillingPage = Loadable(lazy(() => import("@/pages/dashboard/billing")));
+const SettingsPage = Loadable(lazy(() => import("@/pages/dashboard/settings")));
 
 // Board
 const BoardPage = Loadable(lazy(() => import("@/pages/board/Board")));

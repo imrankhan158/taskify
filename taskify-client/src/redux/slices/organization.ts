@@ -1,4 +1,4 @@
-import { Workspace } from "@/interfaces";
+import { CreateWorkspaceModel, Workspace } from "@/interfaces";
 import axiosInstance from "@/utils/axios";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -51,13 +51,13 @@ export function FetchOrganization() {
 }
 
 
-export function CreateNewWorkspace(formValues: any) {
+export function CreateNewWorkspace(formValues: CreateWorkspaceModel) {
     return async (dispatch: any, getState: any) => {
         dispatch(slice.actions.updateIsLoading({ isLoading: true }));
-        await axiosInstance.post("/organization", { ...formValues, orgId: getState().org._id })
+        await axiosInstance.post("/organization/workspace", { ...formValues })
             .then(response => {
+                console.log(response);
                 const workspace = response.data?.createdWorkspace;
-                console.log(response.data);
                 dispatch(slice.actions.createNewWorkspace({ workspace }))
             })
             .catch((error) => {

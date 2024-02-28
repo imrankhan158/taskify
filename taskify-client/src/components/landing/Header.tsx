@@ -2,7 +2,7 @@ import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import WorkspaceSwitcher from "./WorkspaceSwitcher";
+import WorkspaceSwitcher from "../dashboard/WorkspaceSwitcher";
 
 const Header = ({ isUserLoggedIn = false }) => {
   return (
