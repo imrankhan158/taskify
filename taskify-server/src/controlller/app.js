@@ -110,6 +110,7 @@ export const createBoard = asyncHandler(async (req, res) => {
           name: name,
           imageUrl: createdBoard.imageUrl,
           _id: createdBoard._id,
+          workspace: workspaceId,
         },
       },
       "Created Board successfully"

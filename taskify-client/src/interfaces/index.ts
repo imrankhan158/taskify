@@ -10,6 +10,7 @@ interface Organization {
   slug: string;
   imageUrl: string;
   name: string;
+  workspaces: Workspace[];
 }
 
 interface Board {
@@ -34,6 +35,11 @@ interface NavItemProps {
   onExpand: (id: string) => void;
 }
 
+interface OrgState {
+  org: Organization | null;
+  activeWorkspace: Workspace | null;
+  isLoading: boolean;
+}
 
 interface CreateWorkspaceModel {
   name: string;
@@ -42,4 +48,10 @@ interface CreateWorkspaceModel {
   orgId: string;
 }
 
-export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel }
+interface CreateBoardModel {
+  name: string;
+  imageUrl: string;
+  workspaceId: string;
+}
+
+export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState }

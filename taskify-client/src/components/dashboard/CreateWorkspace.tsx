@@ -40,6 +40,7 @@ const CreateWorkspace = ({ setShowCreateWDialog }) => {
   const onSubmit = async (data: CreateWorkspaceModel) => {
     data.orgId = organization?._id;
     dispatch(CreateNewWorkspace(data));
+    setShowCreateWDialog(false);
   };
   return (
     <DialogContent>
