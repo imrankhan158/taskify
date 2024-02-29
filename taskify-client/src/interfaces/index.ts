@@ -6,7 +6,7 @@ interface UserModel {
 }
 
 interface Organization {
-  id: string;
+  _id: string;
   slug: string;
   imageUrl: string;
   name: string;
@@ -21,6 +21,7 @@ interface Board {
 }
 
 interface Workspace {
+  _id: string;
   workspaceId: string;
   imageUrl: string;
   name: string;
@@ -33,12 +34,6 @@ interface NavItemProps {
   isActive: boolean;
   workspace: Workspace;
   onExpand: (id: string) => void;
-}
-
-interface OrgState {
-  org: Organization | null;
-  activeWorkspace: Workspace | null;
-  isLoading: boolean;
 }
 
 interface CreateWorkspaceModel {
@@ -54,4 +49,22 @@ interface CreateBoardModel {
   workspaceId: string;
 }
 
-export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState }
+interface AuthState {
+  isLoggedIn: boolean,
+  user: null,
+  isLoading: boolean,
+  token: null
+}
+
+interface OrgState {
+  org: Organization | null;
+  activeWorkspace: Workspace | null;
+  isLoading: boolean;
+}
+
+interface RootState {
+  auth: AuthState;
+  org: OrgState;
+}
+
+export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState, RootState }

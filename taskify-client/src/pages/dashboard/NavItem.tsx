@@ -6,7 +6,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { NavItemProps } from "@/interfaces";
 import { cn } from "@/lib/utils";
-import { UpdateActiveWorkspace } from "@/redux/slices/organization";
+import { updateActiveWorkspaceAction } from "@/redux/actions/orgActions";
 import { Activity, CreditCard, Layout, Settings } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,7 +44,7 @@ const NavItem = ({
   ];
 
   const onClick = (href: string) => {
-    dispatch(UpdateActiveWorkspace(workspace));
+    dispatch(updateActiveWorkspaceAction(workspace));
     navigate(href);
   };
   return (

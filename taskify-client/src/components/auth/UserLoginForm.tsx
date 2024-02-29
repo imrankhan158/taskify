@@ -9,12 +9,12 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginUser } from "@/redux/slices/auth";
-import { UserModel } from "@/interfaces";
+import { RootState, UserModel } from "@/interfaces";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const LoginSchema = yup.object().shape({

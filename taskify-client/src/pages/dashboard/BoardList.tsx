@@ -1,11 +1,13 @@
-import { Board } from "@/interfaces";
+import { Board, RootState } from "@/interfaces";
 import { User2 } from "lucide-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const BoardList = () => {
-  const workspace = useSelector((state) => state.org.activeWorkspace);
+  const workspace = useSelector(
+    (state: RootState) => state.org.activeWorkspace
+  );
   return (
     <div className="space-y-4 pt-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700">

@@ -1,10 +1,12 @@
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CreditCard } from "lucide-react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/interfaces";
 
 const Info = () => {
-  const workspace = useSelector((state) => state.org.activeWorkspace);
+  const workspace = useSelector(
+    (state: RootState) => state.org.activeWorkspace
+  );
   return (
     <div className="flex items-center gap-x-4">
       <div className="w-[60px] h-[60px] relative">

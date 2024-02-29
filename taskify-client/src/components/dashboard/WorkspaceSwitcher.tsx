@@ -17,13 +17,16 @@ import { Dialog, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useDispatch, useSelector } from "react-redux";
 import CreateWorkspace from "./CreateWorkspace";
-import { UpdateActiveWorkspace } from "@/redux/slices/organization";
-import { Workspace } from "@/interfaces";
+import { updateActiveWorkspaceAction } from "@/redux/actions/orgActions";
+import { RootState, Workspace } from "@/interfaces";
+import { useSearchParams } from "react-router-dom";
 
 export default function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false);
   const [showCreateWDialog, setShowCreateWDialog] = React.useState(false);
-  const { org } = useSelector((state) => state.org);
+  const [searchParams] = useSearchParams();
+  const workspaceId = searchParams.get("workspaceId");
+  const { org } = useSelector((state: RootState) => state.org);
   const group = {
     name: "Manage Workspaces",
     workspaces: [{}] as Workspace[],
@@ -39,13 +42,18 @@ export default function WorkspaceSwitcher() {
       };
     });
   }
+  const activeWorkspace = workspaceId
+    ? group.workspaces.find((item) => {
+        return workspaceId ? item.workspaceId === workspaceId : true;
+      })
+    : group.workspaces[0];
   const [selectedTeam, setSelectedTeam] = React.useState<Workspace>(
-    group.workspaces[0]
+    activeWorkspace as Workspace
   );
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(UpdateActiveWorkspace(selectedTeam));
+    dispatch(updateActiveWorkspaceAction(selectedTeam));
   }, [selectedTeam]);
 
   return (

@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { RegiterUser } from "@/redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/interfaces";
 
 interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -16,7 +17,7 @@ export function UserRegisterForm({
   className,
   ...props
 }: UserRegisterFormProps) {
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const RegisterSchema = yup.object().shape({

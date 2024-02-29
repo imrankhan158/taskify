@@ -12,19 +12,19 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import NavItem from "./NavItem";
-import { Organization, Workspace } from "@/interfaces";
+import { Organization, RootState, Workspace } from "@/interfaces";
 import { useEffect, useState } from "react";
-import { FetchOrganization } from "@/redux/slices/organization";
+import { fetchOrganizationAction } from "@/redux/actions/orgActions";
 import CreateWorkspace from "@/components/dashboard/CreateWorkspace";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState<Map<string, boolean>>(new Map());
   const dispatch = useDispatch();
-  const { org } = useSelector((state) => state.org);
+  const { org } = useSelector((state: RootState) => state.org);
   const [showCreateWDialog, setShowCreateWDialog] = React.useState(false);
   useEffect(() => {
-    dispatch(FetchOrganization());
+    dispatch(fetchOrganizationAction());
   }, []);
 
   let userMemberships: Array<Organization> = [];

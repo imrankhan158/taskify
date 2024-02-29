@@ -1,5 +1,4 @@
-import { CreateWorkspaceModel, OrgState, Workspace } from "@/interfaces";
-import axiosInstance from "@/utils/axios";
+import { OrgState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: OrgState = {
@@ -8,7 +7,7 @@ const initialState: OrgState = {
     isLoading: false
 }
 
-const slice = createSlice({
+const orgSlice = createSlice({
     name: "org",
     initialState,
     reducers: {
@@ -42,72 +41,6 @@ const slice = createSlice({
     }
 })
 
-export default slice.reducer;
+export const { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace } = orgSlice.actions;
 
-
-export function FetchOrganization() {
-    return async (dispatch: any, getState: any) => {
-        dispatch(slice.actions.updateIsLoading({ isLoading: true }));
-        await axiosInstance.get("/organization")
-            .then(response => {
-                const organization = response.data?.organization;
-                dispatch(slice.actions.setOrgData({ organization }))
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log("error", error);
-            })
-            .finally(() => {
-                dispatch(
-                    slice.actions.updateIsLoading({ isLoading: false })
-                );
-            });
-    }
-}
-
-
-export function CreateNewWorkspace(formValues: CreateWorkspaceModel) {
-    return async (dispatch: any, getState: any) => {
-        dispatch(slice.actions.updateIsLoading({ isLoading: true }));
-        await axiosInstance.post("/organization/workspace", { ...formValues })
-            .then(response => {
-                console.log(response);
-                const workspace = response.data?.createdWorkspace;
-                dispatch(slice.actions.createNewWorkspace({ workspace }))
-            })
-            .catch((error) => {
-                console.log("error", error);
-            })
-            .finally(() => {
-                dispatch(
-                    slice.actions.updateIsLoading({ isLoading: false })
-                );
-            });
-    }
-}
-
-export function CreateNewBoard(formValues: CreateWorkspaceModel) {
-    return async (dispatch: any, getState: any) => {
-        dispatch(slice.actions.updateIsLoading({ isLoading: true }));
-        await axiosInstance.post("/organization/board", { ...formValues })
-            .then(response => {
-                console.log(response.data.createdBoard);
-                const board = response.data.createdBoard;
-                dispatch(slice.actions.createNewBoard({ board }));
-            })
-            .catch((error) => {
-                console.log("error", error);
-            })
-            .finally(() => {
-                dispatch(slice.actions.updateIsLoading({ isLoading: false }));
-            });
-    };
-}
-
-export function UpdateActiveWorkspace(workspace: Workspace) {
-    return async (dispatch: any, getState: any) => {
-        dispatch(slice.actions.updateIsLoading({ isLoading: true }));
-        dispatch(slice.actions.updateActiveWorkspace({ workspace }));
-        dispatch(slice.actions.updateIsLoading({ isLoading: false }));
-    }
-}
+export default orgSlice.reducer;

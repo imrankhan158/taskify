@@ -1,11 +1,12 @@
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
+import { RootState } from "@/interfaces";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   useEffect(() => {
     if (isLoggedIn) {

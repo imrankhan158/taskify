@@ -1,18 +1,19 @@
 import Info from "@/components/dashboard/boards/Info";
 import Header from "@/components/landing/Header";
+import { RootState } from "@/interfaces";
 import Sidebar from "@/pages/dashboard/Sidebar";
-import { FetchOrganization } from "@/redux/slices/organization";
+import { fetchOrganizationAction } from "@/redux/actions/orgActions";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const MainLayout = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(FetchOrganization());
-  }, []);
+    dispatch(fetchOrganizationAction());
+  }, [dispatch]);
   if (!isLoggedIn) {
     navigate("/auth/login");
   }

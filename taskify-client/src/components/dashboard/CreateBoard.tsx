@@ -13,13 +13,15 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";
-import { CreateNewBoard } from "@/redux/slices/organization";
+import { createNewBoardAction } from "@/redux/actions/orgActions";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateBoardModel } from "@/interfaces";
+import { CreateBoardModel, RootState } from "@/interfaces";
 
 const CreateBoard = ({ setShowCreateWDialog }) => {
   const dispatch = useDispatch();
-  const workspace = useSelector((state) => state.org.activeWorkspace);
+  const workspace = useSelector(
+    (state: RootState) => state.org.activeWorkspace
+  );
   const BoardSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     imageUrl: yup.string(),
@@ -37,7 +39,7 @@ const CreateBoard = ({ setShowCreateWDialog }) => {
 
   const onSubmit = async (data: CreateBoardModel) => {
     data.workspaceId = workspace?.workspaceId;
-    dispatch(CreateNewBoard(data));
+    dispatch(createNewBoardAction(data));
     setShowCreateWDialog(false);
   };
   return (

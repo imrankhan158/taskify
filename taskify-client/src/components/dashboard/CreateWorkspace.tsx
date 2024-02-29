@@ -13,13 +13,13 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";
-import { CreateNewWorkspace } from "@/redux/slices/organization";
+import { createNewWorkspaceAction } from "@/redux/actions/orgActions";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateWorkspaceModel } from "@/interfaces";
+import { CreateWorkspaceModel, RootState } from "@/interfaces";
 
 const CreateWorkspace = ({ setShowCreateWDialog }) => {
   const dispatch = useDispatch();
-  const organization = useSelector((state) => state.org.org);
+  const organization = useSelector((state: RootState) => state.org.org);
   const WorkSpaceSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     plan: yup.string(),
@@ -39,7 +39,7 @@ const CreateWorkspace = ({ setShowCreateWDialog }) => {
 
   const onSubmit = async (data: CreateWorkspaceModel) => {
     data.orgId = organization?._id;
-    dispatch(CreateNewWorkspace(data));
+    dispatch(createNewWorkspaceAction(data));
     setShowCreateWDialog(false);
   };
   return (
