@@ -49,8 +49,20 @@ services:
       - 8025:8025
     networks:
       - taskify-network
+  taskify-redis:
+    container_name: taskify-redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass password
+    volumes:
+      - redisData:/data
+    networks:
+      - taskify-network
 volumes:
   dbdata6:
+  redisData:
 
 networks:
   taskify-network:

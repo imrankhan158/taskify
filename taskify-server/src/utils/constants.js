@@ -20,3 +20,7 @@ export const UserRole = {
   ADMIN: "ADMIN",
   INDIVIDUAL: "INDIVIDUAL",
 };
+
+export const CacheKeys = {
+  ORGANIZATION_DATA: "org-data",
+};

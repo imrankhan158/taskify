@@ -6,7 +6,7 @@ import { Workspace } from "../models/app/workspace.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { UserRole } from "../utils/constants.js";
+import { CacheKeys, UserRole } from "../utils/constants.js";
 
 export const createOrganization = asyncHandler(async (req, res) => {
   const organization = await Organization.create({
@@ -29,7 +29,22 @@ export const createOrganization = asyncHandler(async (req, res) => {
 });
 
 export const getOrganization = asyncHandler(async (req, res) => {
+  const cacheService = req.app.get("cacheService");
   const user = req.user;
+  const cacheKey = CacheKeys.ORGANIZATION_DATA + "-" + user._id;
+  const orgCacheData = await cacheService.get(cacheKey);
+  if (orgCacheData) {
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          organization: JSON.parse(orgCacheData),
+          cache: true,
+        },
+        "Fetch Organization successfully"
+      )
+    );
+  }
   const organization = await Organization.findOne({
     createdBy: user._id,
   }).select("_id name createdAt");
@@ -48,6 +63,16 @@ export const getOrganization = asyncHandler(async (req, res) => {
     return { ...ws, boards: workspaceBoards };
   });
 
+  cacheService.set(
+    cacheKey,
+    JSON.stringify({
+      _id: organization._id,
+      name: organization.name,
+      createdAt: organization.createdAt,
+      workspaces: updatedWorkspaces,
+    })
+  );
+
   return res.status(200).json(
     new ApiResponse(
       200,
@@ -58,6 +83,7 @@ export const getOrganization = asyncHandler(async (req, res) => {
           createdAt: organization.createdAt,
           workspaces: updatedWorkspaces,
         },
+        cache: false,
       },
       "Fetch Organization successfully"
     )
@@ -78,6 +104,10 @@ export const createWorkspace = asyncHandler(async (req, res) => {
   if (!createdWorkspace) {
     throw new ApiError(500, "Something went wrong while creating workspace");
   }
+  const cacheService = req.app.get("cacheService");
+  const user = req.user;
+  const cacheKey = CacheKeys.ORGANIZATION_DATA + "-" + user._id;
+  await cacheService.clearCache(cacheKey);
   return res
     .status(200)
     .json(
@@ -144,6 +174,10 @@ export const createTodoList = asyncHandler(async (req, res) => {
   if (!createdTodoList) {
     throw new ApiError(500, "Something went wrong while creating todo list");
   }
+  const cacheService = req.app.get("cacheService");
+  const user = req.user;
+  const cacheKey = CacheKeys.ORGANIZATION_DATA + "-" + user._id;
+  await cacheService.clearCache(cacheKey);
   return res.status(200).json(
     new ApiResponse(
       200,

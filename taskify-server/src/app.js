@@ -10,8 +10,11 @@ import xss from "xss-clean";
 import authRoutes from "./routes/auth.js";
 import { errorHandler } from "./middlewares/error.js";
 import appRoutes from "./routes/app.js";
+import CacheService from "./services/cacheService.js";
 dotenv.config();
 
+const cacheType = process.env.CACHE_TYPE || "redis";
+const cacheService = new CacheService(cacheType);
 const app = express();
 app.use(
   cors({
@@ -19,6 +22,8 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
+
+app.set("cacheService", cacheService);
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
