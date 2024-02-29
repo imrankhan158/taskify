@@ -10,7 +10,7 @@ import xss from "xss-clean";
 import authRoutes from "./routes/auth.js";
 import { errorHandler } from "./middlewares/error.js";
 import appRoutes from "./routes/app.js";
-import CacheService from "./services/cacheService.js";
+import CacheService from "./services/cache/cacheService.js";
 dotenv.config();
 
 const cacheType = process.env.CACHE_TYPE || "redis";

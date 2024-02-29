@@ -16,15 +16,15 @@ class CacheService {
   }
 
   async get(key) {
-    return this.cache.get(key);
+    return await this.cache.get(key);
   }
 
   async set(key, value, ttl) {
-    return this.cache.set(key, value, ttl);
+    return await this.cache.set(key, value, ttl);
   }
 
   async clearCache(key) {
-    return this.cache.clearCache(key);
+    return await this.cache.clearCache(key);
   }
 }
 
