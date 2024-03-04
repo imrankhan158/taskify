@@ -13,11 +13,24 @@ interface Organization {
   workspaces: Workspace[];
 }
 
+interface Task {
+  _id: string;
+  name: string;
+  description: string;
+}
+
+interface Card {
+  _id: string;
+  name: string;
+  tasks: Task[];
+}
+
 interface Board {
   _id: string;
   workspaceId: string;
   imageUrl: string;
   name: string;
+  cardList: Card[];
 }
 
 interface Workspace {
@@ -56,10 +69,19 @@ interface AuthState {
   token: null
 }
 
+interface CardModal {
+  id?: string;
+  task: Task;
+  isOpen: boolean;
+  card: Card;
+}
+
 interface OrgState {
   org: Organization | null;
   activeWorkspace: Workspace | null;
   isLoading: boolean;
+  activeBoard: Board | null;
+  modalData: { cardModal: CardModal | null }
 }
 
 interface RootState {
@@ -67,4 +89,10 @@ interface RootState {
   org: OrgState;
 }
 
-export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState, RootState }
+interface AuditLog {
+  action: string;
+  entityTitle: string;
+  entityType: string;
+}
+
+export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState, RootState, Card, Task, AuditLog }

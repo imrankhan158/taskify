@@ -4,6 +4,7 @@ import { RootState } from "@/interfaces";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
+import { Toaster } from "sonner";
 
 const AuthLayout = () => {
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
@@ -16,6 +17,7 @@ const AuthLayout = () => {
   }, [isLoggedIn]);
   return (
     <>
+      <Toaster />
       <Header />
       <Outlet />
       <Footer />

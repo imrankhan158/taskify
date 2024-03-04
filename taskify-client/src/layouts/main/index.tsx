@@ -6,6 +6,7 @@ import { fetchOrganizationAction } from "@/redux/actions/orgActions";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
+import { Toaster } from "sonner";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const MainLayout = () => {
   }
   return (
     <div>
+      <Toaster />
       <Header isUserLoggedIn={true} />
       <div className="flex mt-24 mx-12">
         {/* Sidebar */}

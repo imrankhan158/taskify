@@ -4,7 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: OrgState = {
     org: null,
     activeWorkspace: null,
-    isLoading: false
+    isLoading: false,
+    activeBoard: null,
+    modalData: { cardModal: null }
 }
 
 const orgSlice = createSlice({
@@ -37,10 +39,42 @@ const orgSlice = createSlice({
         },
         updateActiveWorkspace: (state, action) => {
             state.activeWorkspace = action.payload.workspace;
+        },
+        updateActiveBoard: (state, action) => {
+            state.activeBoard = action.payload.board || {};
+        },
+        updateTask: (state, action) => {
+            if (state.activeBoard) {
+                state.activeBoard.cardList = state.activeBoard.cardList.map(card => {
+                    card.tasks = card.tasks.map(task => {
+                        if (task._id === action.payload.task._id) {
+                            return { ...action.payload.task };
+                        }
+                        return task;
+                    });
+                    return card;
+                });
+                if (state.modalData.cardModal) {
+                    state.modalData.cardModal.task = { ...state.modalData.cardModal?.task, ...action.payload.task }
+                }
+            }
+        },
+        deleteTask: (state, action) => {
+            if (state.activeBoard) {
+                state.activeBoard.cardList = state.activeBoard.cardList.map(card => {
+                    card.tasks = card.tasks.filter(task => task._id !== action.payload.taskId);
+                    return card;
+                });
+            }
+        },
+        updateModalCardModal: (state, action) => {
+            state.modalData.cardModal = {
+                ...action.payload.cardModal
+            };
         }
     }
 })
 
-export const { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace } = orgSlice.actions;
+export const { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace, updateActiveBoard, updateModalCardModal, deleteTask, updateTask } = orgSlice.actions;
 
 export default orgSlice.reducer;
