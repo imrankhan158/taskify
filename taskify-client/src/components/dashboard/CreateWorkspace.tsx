@@ -17,7 +17,11 @@ import { createNewWorkspaceAction } from "@/redux/actions/orgActions";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateWorkspaceModel, RootState } from "@/interfaces";
 
-const CreateWorkspace = ({ setShowCreateWDialog }) => {
+interface CreateWorkspaceProps {
+  setShowCreateWDialog: () => object;
+}
+
+const CreateWorkspace = ({ setShowCreateWDialog }: CreateWorkspaceProps) => {
   const dispatch = useDispatch();
   const organization = useSelector((state: RootState) => state.org.org);
   const WorkSpaceSchema = yup.object().shape({

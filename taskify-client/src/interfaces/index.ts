@@ -90,9 +90,13 @@ interface RootState {
 }
 
 interface AuditLog {
+  id: string;
   action: string;
   entityTitle: string;
   entityType: string;
+  userName: string;
+  userImage: string;
+  createdAt: Date;
 }
 
-export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState, RootState, Card, Task, AuditLog }
+export type { UserModel, Organization, NavItemProps, Workspace, Board, CreateWorkspaceModel, CreateBoardModel, OrgState, RootState, Card, Task, AuditLog, CardModal }

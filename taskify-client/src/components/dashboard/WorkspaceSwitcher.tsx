@@ -34,6 +34,7 @@ export default function WorkspaceSwitcher() {
   if (org?.workspaces) {
     group.workspaces = org?.workspaces.map((workspace: any) => {
       return {
+        _id: workspace._id,
         name: workspace.name,
         imageUrl: workspace.avatar.url,
         workspaceId: workspace._id,

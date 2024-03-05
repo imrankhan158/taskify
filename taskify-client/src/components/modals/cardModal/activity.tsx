@@ -1,8 +1,15 @@
 import { ActivityIcon } from "lucide-react";
 import React from "react";
 import ActivityItem from "./activityItem";
+import { AuditLog, CardModal } from "@/interfaces";
 
-const Activity = ({ data, activities = [] }) => {
+interface ActivityProps {
+  data: CardModal;
+  activities: AuditLog[];
+}
+
+const Activity = ({ data, activities = [] }: ActivityProps) => {
+  console.log(data);
   return (
     <div className="flex items-start gap-x-3 w-full">
       <ActivityIcon className="h-5 w-5 mt-0.5 text-neutral-700" />

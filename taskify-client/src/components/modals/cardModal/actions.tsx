@@ -1,22 +1,27 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
+import { CardModal } from "@/interfaces";
 import {
   deleteTaskAction,
   updateModalCardModalAction,
 } from "@/redux/actions/orgActions";
 import { Copy, Trash } from "lucide-react";
-import React from "react";
 import { useDispatch } from "react-redux";
 
-const Actions = ({ data }) => {
+interface ActionsProps {
+  data: CardModal | undefined;
+}
+
+const Actions = ({ data }: ActionsProps) => {
   const dispatch = useDispatch();
   const onCopy = () => {
     console.log("onCopy");
   };
 
-  const task = data.task;
+  const task = data?.task;
 
   const onDelete = () => {
-    dispatch(deleteTaskAction(task._id));
+    dispatch(deleteTaskAction(task?._id));
     dispatch(
       updateModalCardModalAction({ isOpen: false, id: undefined, task: null })
     );

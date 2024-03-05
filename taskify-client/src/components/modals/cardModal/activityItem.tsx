@@ -1,8 +1,13 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { AuditLog } from "@/interfaces";
 import { generateLogMessage } from "@/utils/generate-log-message";
 import React from "react";
 
-const ActivityItem = ({ data }) => {
+interface ActivityItemProps {
+  data: AuditLog;
+}
+
+const ActivityItem = ({ data }: ActivityItemProps) => {
   return (
     <li className="flex items-center gap-x-2">
       <Avatar className="h-8 w-8">

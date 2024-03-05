@@ -17,7 +17,11 @@ import { createNewBoardAction } from "@/redux/actions/orgActions";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateBoardModel, RootState } from "@/interfaces";
 
-const CreateBoard = ({ setShowCreateWDialog }) => {
+interface CreateBoardProps {
+  setShowCreateWDialog: () => object;
+}
+
+const CreateBoard = ({ setShowCreateWDialog }: CreateBoardProps) => {
   const dispatch = useDispatch();
   const workspace = useSelector(
     (state: RootState) => state.org.activeWorkspace

@@ -1,10 +1,14 @@
 import React from "react";
-import CardModal from "../modals/cardModal";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/interfaces";
+import { useDispatch } from "react-redux";
+import { Card, Task } from "@/interfaces";
 import { updateModalCardModalAction } from "@/redux/actions/orgActions";
 
-const CardItem = ({ card, task }) => {
+interface CardItemProps {
+  card: Card;
+  task: Task;
+}
+
+const CardItem = ({ card, task }: CardItemProps) => {
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(

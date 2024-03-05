@@ -1,9 +1,14 @@
+import { CardModal } from "@/interfaces";
 import { updateTaskAction } from "@/redux/actions/orgActions";
 import { Layout } from "lucide-react";
 import React, { ElementRef, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const Header = ({ data }) => {
+interface HeaderProps {
+  data: CardModal | undefined;
+}
+
+const Header = ({ data }: HeaderProps) => {
   const task = data?.task;
   const [title, setTitle] = useState(task?.name);
   const inputRef = useRef<ElementRef<"input">>(null);

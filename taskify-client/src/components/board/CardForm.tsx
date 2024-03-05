@@ -2,10 +2,14 @@ import { Plus, X } from "lucide-react";
 import React, { ElementRef, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, Task } from "@/interfaces";
+import { Card, RootState, Task } from "@/interfaces";
 import { updateActiveBoardAction } from "@/redux/actions/orgActions";
 
-const CardForm = ({ card }) => {
+interface CardFormProps {
+  card: Card;
+}
+
+const CardForm = ({ card }: CardFormProps) => {
   const dispatch = useDispatch();
   const activeBoard = useSelector((state: RootState) => state.org?.activeBoard);
   const [isEditing, setIsEditing] = useState(false);

@@ -1,10 +1,14 @@
 import React, { ElementRef, useRef, useState } from "react";
 import ListOptions from "./ListOptions";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/interfaces";
+import { Card, RootState } from "@/interfaces";
 import { updateActiveBoardAction } from "@/redux/actions/orgActions";
 
-const ListHeader = ({ card }) => {
+interface ListHeaderProps {
+  card: Card;
+}
+
+const ListHeader = ({ card }: ListHeaderProps) => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const [title, setTitle] = useState(card?.name || "");

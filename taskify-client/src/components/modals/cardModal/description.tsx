@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { Task } from "@/interfaces";
 import { updateTaskAction } from "@/redux/actions/orgActions";
 import { AlignLeft } from "lucide-react";
 import React, { ElementRef, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const Description = ({ task }) => {
+interface DescriptionProps {
+  task: Task | undefined;
+}
+
+const Description = ({ task }: DescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
-  console.log("task", task);
 
   const formRef = useRef<ElementRef<"form">>(null);
   const textareaRef = useRef<ElementRef<"textarea">>(null);

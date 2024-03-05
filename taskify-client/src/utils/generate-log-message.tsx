@@ -1,3 +1,4 @@
+import { AuditLog } from "@/interfaces";
 import { ACTION } from "./constants";
 
 export const generateLogMessage = (log: AuditLog) => {
