@@ -71,10 +71,38 @@ const orgSlice = createSlice({
             state.modalData.cardModal = {
                 ...action.payload.cardModal
             };
-        }
+        },
+        updateTaskOrder: (state, action) => {
+            const { source: src, destination: dist, type } = action.payload;
+            const destinationIndex = dist.index > src.index && src.droppableId === dist.droppableId ? dist.index - 1 : dist.index;
+            let task = {};
+            switch (type) {
+                case "card":
+                    state.activeBoard.cardList = state.activeBoard.cardList.map(card => {
+                        if (card._id === src.droppableId) {
+                            task = card.tasks[src.index];
+                            card.tasks.splice(src.index, 1);
+                        }
+                        return card;
+                    });
+                    state.activeBoard.cardList = state.activeBoard.cardList.map(card => {
+                        if (card._id === dist.droppableId) {
+                            card.tasks.splice(destinationIndex, 0, task);
+                        }
+                        return card;
+                    });
+                    break;
+                case "list":
+                    state.activeBoard.cardList[dist.index] = state.activeBoard.cardList.splice(src.index, 1, state.activeBoard.cardList[dist.index])[0];
+                    break;
+                default:
+                    break;
+            }
+
+        },
     }
 })
 
-export const { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace, updateActiveBoard, updateModalCardModal, deleteTask, updateTask } = orgSlice.actions;
+export const { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace, updateActiveBoard, updateModalCardModal, deleteTask, updateTask, updateTaskOrder } = orgSlice.actions;
 
 export default orgSlice.reducer;

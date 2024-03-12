@@ -1,6 +1,6 @@
 import axiosInstance from "@/utils/axios";
 import { Board, CreateWorkspaceModel, Task, Workspace } from "@/interfaces";
-import { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace, updateActiveBoard, updateModalCardModal, deleteTask, updateTask } from "../slices/organization";
+import { updateIsLoading, setOrgData, createNewWorkspace, createNewBoard, updateActiveWorkspace, updateActiveBoard, updateModalCardModal, deleteTask, updateTask, updateTaskOrder } from "../slices/organization";
 import { Dispatch } from "redux";
 
 export const fetchOrganizationAction = () => async (dispatch: Dispatch<any>) => {
@@ -72,5 +72,11 @@ export const updateTaskAction = (task: Task) => (dispatch: Dispatch<any>) => {
 export const deleteTaskAction = (taskId: string) => (dispatch: Dispatch<any>) => {
     dispatch(updateIsLoading({ isLoading: true }));
     dispatch(deleteTask({ taskId }));
+    dispatch(updateIsLoading({ isLoading: false }));
+}
+
+export const updateTaskOrderAction = (data) => (dispatch: Dispatch<any>) => {
+    dispatch(updateIsLoading({ isLoading: true }));
+    dispatch(updateTaskOrder({ ...data }));
     dispatch(updateIsLoading({ isLoading: false }));
 }
