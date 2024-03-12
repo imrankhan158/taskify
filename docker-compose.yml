@@ -9,7 +9,7 @@ services:
       - ./taskify-client:/app:ro
       - /app/node_modules/
     ports:
-      - 127.0.0.1:3000:3000
+      - 127.0.0.1:3000:80
     restart: always
     networks:
       - taskify-network
@@ -58,6 +58,17 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass password
     volumes:
       - redisData:/data
+    networks:
+      - taskify-network
+  taskify-rabbitmq:
+    container_name: taskify-rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - taskify-network
 volumes:

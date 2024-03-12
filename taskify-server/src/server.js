@@ -1,6 +1,6 @@
-import app from "./src/app.js";
+import app from "./app.js";
 import http from "http";
-import dbConnect from "./src/utils/database.js";
+import dbConnect from "./utils/database.js";
 
 const server = http.createServer(app);
 
