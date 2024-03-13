@@ -1,11 +1,11 @@
 import axios from "axios";
-import { BASE_URL } from "@/config.ts";
+import { BASE_URL, HOST_NAME } from "@/config.ts";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    "access-control-allow-origin": "http://localhost:5000",
+    "access-control-allow-origin": HOST_NAME,
     "Content-Type": "application/json",
   },
 });

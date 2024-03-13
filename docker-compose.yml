@@ -8,8 +8,8 @@ services:
     volumes:
       - ./taskify-client:/app:ro
       - /app/node_modules/
-    ports:
-      - 127.0.0.1:3000:80
+    # ports:
+    #   - 3000:80
     restart: always
     networks:
       - taskify-network
@@ -22,8 +22,8 @@ services:
       - ./taskify-server:/app:ro
       - /app/node_modules/
     restart: always
-    ports:
-      - 127.0.0.1:5000:5000
+    # ports:
+    #   - 5000:5000
     env_file:
       - ./taskify-server/.env
     networks:
@@ -71,6 +71,16 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - taskify-network
+  taskify-nginx:
+    container_name: taskify-nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx-conf/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - 80:80
+    networks:
+      - taskify-network
+
 volumes:
   dbdata6:
   redisData:
