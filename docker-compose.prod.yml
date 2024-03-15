@@ -1,0 +1,82 @@
+version: "3.8"
+services:
+  taskify-client:
+    container_name: taskify-client
+    image: imrankdevops/taskify-client:latest
+    volumes:
+      - ./taskify-client:/app:ro
+      - /app/node_modules/
+    restart: always
+    networks:
+      - taskify-network
+  taskify-server:
+    container_name: taskify-server
+    image: imrankdevops/taskify-server:latest
+    volumes:
+      - ./taskify-server:/app:ro
+      - /app/node_modules/
+    restart: always
+    env_file:
+      - ./taskify-server/.env
+    networks:
+      - taskify-network
+    depends_on:
+      - taskify-mongodb
+      - taskify-mailhog
+  taskify-mongodb:
+    container_name: taskify-mongodb
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata6:/data/db
+    networks:
+      - taskify-network
+  taskify-mailhog:
+    container_name: taskify-mailhog
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - taskify-network
+  taskify-redis:
+    container_name: taskify-redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass password
+    volumes:
+      - redisData:/data
+    networks:
+      - taskify-network
+  taskify-rabbitmq:
+    container_name: taskify-rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - taskify-network
+  taskify-nginx:
+    container_name: taskify-nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx-conf/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - 80:80
+    networks:
+      - taskify-network
+
+volumes:
+  dbdata6:
+  redisData:
+
+networks:
+  taskify-network:
+    driver: bridge
