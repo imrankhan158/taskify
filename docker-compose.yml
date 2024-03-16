@@ -8,9 +8,9 @@ services:
     volumes:
       - ./taskify-client:/app:ro
       - /app/node_modules/
-    # ports:
-    #   - 3000:80
     restart: always
+    env_file:
+      - ./taskify-client/.env
     networks:
       - taskify-network
   taskify-server:
@@ -22,8 +22,6 @@ services:
       - ./taskify-server:/app:ro
       - /app/node_modules/
     restart: always
-    # ports:
-    #   - 5000:5000
     env_file:
       - ./taskify-server/.env
     networks:
