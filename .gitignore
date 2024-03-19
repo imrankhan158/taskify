@@ -43,3 +43,7 @@ public/
 # Exclude Env file
 .env
 *.env
+*.production
+
+
+*.prod.yml
